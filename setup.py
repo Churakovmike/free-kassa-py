@@ -11,7 +11,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/Churakovmike/free-kassa-py',
     author='Mikhail Churakov',
-    email='churakovmike@mail.ru',
+    author_email='churakovmike@mail.ru',
 
     classifiers=[
         'Development Status :: 5 - Stable',
@@ -24,7 +24,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
 
-    keyword='freekassa',
+    keywords='freekassa',
 
     packages=find_packages(exclude=['tests']),
 
