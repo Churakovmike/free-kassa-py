@@ -14,7 +14,7 @@ setup(
     author_email='churakovmike@mail.ru',
 
     classifiers=[
-        'Development Status :: 5 - Stable',
+        'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
 
