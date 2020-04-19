@@ -15,11 +15,17 @@ class FreeKassaApi:
         self.wallet_id = wallet_id
 
     def send_request(self, params, method='post'):
+        """
+        Send request to freekassa api
+        :param params:params
+        :param method:method
+        :return:
+        """
         return requests.__dict__[method](self.base_url, params=params)
 
     def get_balance(self):
         """
-
+        Get merchant balance
         :return:
         """
         params = {
@@ -27,8 +33,57 @@ class FreeKassaApi:
             's': self.generate_api_signature(),
             'action': 'get_balance',
         }
-        print(params)
+
         return self.send_request(params=params)
+
+    def get_order(self, order_id='', int_id=''):
+        """
+
+        :return:
+        """
+        params = {
+            'merchant_id': self.merchant_id,
+            's': self.generate_api_signature(),
+            'action': 'check_order_status',
+            'order_id': order_id,
+            'intid': int_id,
+        }
+
+        return self.send_request(params=params)
+
+    def withdraw(self, amount, currency):
+        """
+
+        :return:
+        """
+        params = {
+            'merchant_id': self.merchant_id,
+            'currency': currency,
+            'amount': amount,
+            's': self.generate_api_signature(),
+            'action': 'payment',
+        }
+
+        return self.send_request(params=params)
+
+    def invoice(self, email, amount, description):
+        """
+
+        :param email:
+        :param amount:
+        :param description:
+        :return:
+        """
+        params = {
+            'merchant_id': self.merchant_id,
+            'email': email,
+            'amount': amount,
+            'desc': description,
+            's': self.generate_api_signature(),
+            'action': 'create_bill',
+        }
+
+        return self.send_request(params)
 
     def generate_api_signature(self):
         """
