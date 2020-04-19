@@ -9,3 +9,4 @@ __pycache__/
 *.so
 *~
 .python-version
+example.py
