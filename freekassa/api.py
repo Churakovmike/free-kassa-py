@@ -1,5 +1,6 @@
 import requests
 import hashlib
+from urllib.parse import urlencode
 
 
 class FreeKassaApi:
@@ -202,7 +203,7 @@ class FreeKassaApi:
 
         return self.send_request(params=params, url=self.wallet_api_url)
 
-    def generate_payment_link(self, order_id, summ, email='', description=''):
+    def generate_payment_link(self, order_id, summ, email='', description='') -> str:
         """
         @todo: todo
         :param order_id:
@@ -211,7 +212,19 @@ class FreeKassaApi:
         :param description:
         :return:
         """
-        pass
+        params = {
+            'o': order_id,
+            'oa': summ,
+            's': '',
+            'm': self.merchant_id,
+            'i': '',
+            'em': email,
+            'lang': 'ru',
+            'us_desc': description,
+        }
+
+        return self.base_form_url + urlencode(params)
+
 
     def generate_api_signature(self):
         """
