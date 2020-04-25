@@ -131,14 +131,29 @@ class FreeKassaApi:
         @todo: todo
         :return:
         """
-        pass
+        params = {
+            'wallet_id': self.wallet_id,
+            'payment_id': payment_id,
+            'sign': '',
+            'action': 'get_payment_status',
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
 
     def transfer_money(self, purse, amount):
         """
         @todo: todo
         :return:
         """
-        pass
+        params = {
+            'wallet_id': self.wallet_id,
+            'purse': purse,
+            'amount': amount,
+            'sign': '',
+            'action': 'transfer',
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
 
     def online_payments(self, service_id, account, amount):
         """
@@ -148,14 +163,29 @@ class FreeKassaApi:
         :param amount:
         :return:
         """
-        pass
+        params = {
+            'wallet_id': self.wallet_id,
+            'service_id': service_id,
+            'account': account,
+            'amount': amount,
+            'sign': '',
+            'action': 'online_payment',
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
 
     def get_online_services(self):
         """
         @todo: todo
         :return:
         """
-        pass
+        params = {
+            'wallet_id': self.wallet_id,
+            'sign': '',
+            'action': 'providers',
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
 
     def get_online_payment_status(self, payment_id):
         """
@@ -163,7 +193,14 @@ class FreeKassaApi:
         :param payment_id:
         :return:
         """
-        pass
+        params = {
+            'wallet_id': self.wallet_id,
+            'payment_id': payment_id,
+            'sign': '',
+            'action': 'check_online_payment',
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
 
     def generate_payment_link(self, order_id, summ, email='', description=''):
         """
