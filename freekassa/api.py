@@ -56,9 +56,34 @@ class FreeKassaApi:
 
         return self.send_request(params=params)
 
+    def export_order(self, status, date_from, date_to, limit=0, offset=100):
+        """
+        Get orders list.
+        :param status:
+        :param date_from:
+        :param date_to:
+        :param limit:
+        :param offset:
+        :return:
+        """
+        params = {
+            'merchant_id': self.merchant_id,
+            's': self.generate_api_signature(),
+            'action': 'get_orders',
+            'date_from': date_from,
+            'date_to': date_to,
+            'status': status,
+            'limit': limit,
+            'offset': offset,
+        }
+
+        return self.send_request(params=params)
+
     def withdraw(self, amount, currency):
         """
-
+        Withdraw money.
+        :param amount:
+        :param currency:
         :return:
         """
         params = {
@@ -73,7 +98,7 @@ class FreeKassaApi:
 
     def invoice(self, email, amount, description):
         """
-
+        Create invoice.
         :param email:
         :param amount:
         :param description:
@@ -92,7 +117,7 @@ class FreeKassaApi:
 
     def get_wallet_balance(self):
         """
-
+        Get wallet balance.
         :return:
         """
         params = {
@@ -105,7 +130,7 @@ class FreeKassaApi:
 
     def wallet_withdraw(self, purse, amount, currency, description, disable_exchange=1):
         """
-        @todo: add generate tuple hash
+        Withdraw money from wallet.
         :param purse:
         :param amount:
         :param currency:
@@ -128,7 +153,8 @@ class FreeKassaApi:
 
     def get_operation_status(self, payment_id):
         """
-        @todo: todo
+        Get operation status.
+        :param payment_id:
         :return:
         """
         params = {
@@ -142,7 +168,9 @@ class FreeKassaApi:
 
     def transfer_money(self, purse, amount):
         """
-        @todo: todo
+        Transfer money to another wallet.
+        :param purse:
+        :param amount:
         :return:
         """
         params = {
@@ -157,7 +185,7 @@ class FreeKassaApi:
 
     def online_payments(self, service_id, account, amount):
         """
-        @todo: todo
+        Payment online services.
         :param service_id:
         :param account:
         :param amount:
@@ -176,6 +204,7 @@ class FreeKassaApi:
 
     def get_online_services(self):
         """
+        Get list of payment services.
         :return:
         """
         params = {
@@ -188,6 +217,7 @@ class FreeKassaApi:
 
     def get_online_payment_status(self, payment_id):
         """
+        Check status online payment.
         :param payment_id:
         :return:
         """
@@ -202,7 +232,7 @@ class FreeKassaApi:
 
     def generate_payment_link(self, order_id, summ, email='', description='') -> str:
         """
-        @todo: todo
+        Generate payment link for redirect user to Free-Kassa.com.
         :param order_id:
         :param summ:
         :param email:
@@ -212,9 +242,9 @@ class FreeKassaApi:
         params = {
             'o': order_id,
             'oa': summ,
-            's': '',
+            's': self.__make_hash(params=[]),
             'm': self.merchant_id,
-            'i': '',
+            'i': 'rub',
             'em': email,
             'lang': 'ru',
             'us_desc': description,
@@ -236,13 +266,14 @@ class FreeKassaApi:
         """
         return hashlib.md5(str(self.wallet_id + self.wallet_api_key).encode('utf-8')).hexdigest()
 
-    def __make_hash(self, params, *args, **kwargs):
+    def __make_hash(self, params, sep=' ', *args, **kwargs):
         """
         Generate hash query for request params
         :param params:
+        :param sep:
         :param args:
         :param kwargs:
         :return:
         """
-        sign = ''.join(params)
+        sign = f'{sep}'.join(params)
         return hashlib.md5(sign.encode('utf-8')).hexdigest()
