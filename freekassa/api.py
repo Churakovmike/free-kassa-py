@@ -121,8 +121,8 @@ class FreeKassaApi:
             'desc': description,
             'disable_exchange': disable_exchange,
             'currency': currency,
-            'sign': '',
             'action': 'cashout',
+            'sign': self.__make_hash(params=[self.wallet_id, currency, amount, purse, self.wallet_api_key]),
         }
 
         return self.send_request(params=params, url=self.wallet_api_url)
@@ -135,7 +135,7 @@ class FreeKassaApi:
         params = {
             'wallet_id': self.wallet_id,
             'payment_id': payment_id,
-            'sign': '',
+            'sign': self.__make_hash(params=[self.wallet_id, payment_id, self.wallet_api_key]),
             'action': 'get_payment_status',
         }
 
@@ -150,7 +150,7 @@ class FreeKassaApi:
             'wallet_id': self.wallet_id,
             'purse': purse,
             'amount': amount,
-            'sign': '',
+            'sign': self.__make_hash(params=[self.wallet_id, purse, amount, self.wallet_api_key]),
             'action': 'transfer',
         }
 
@@ -225,7 +225,6 @@ class FreeKassaApi:
 
         return self.base_form_url + urlencode(params)
 
-
     def generate_api_signature(self):
         """
         Generate api signature
@@ -239,3 +238,14 @@ class FreeKassaApi:
         :return:
         """
         return hashlib.md5(str(self.wallet_id + self.wallet_api_key).encode('utf-8')).hexdigest()
+
+    def __make_hash(self, params, *args, **kwargs):
+        """
+        Generate hash query for request params
+        :param params:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        sign = ''.join(params)
+        return hashlib.md5(sign.encode('utf-8')).hexdigest()
