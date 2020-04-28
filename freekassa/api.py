@@ -230,6 +230,117 @@ class FreeKassaApi:
 
         return self.send_request(params=params, url=self.wallet_api_url)
 
+    def create_btc_address(self):
+        """
+        Create BTC address.
+        :return:
+        """
+        return self.create_crypto_address('create_btc_address')
+
+    def create_ltc_address(self):
+        """
+        Create LTC address.
+        :return:
+        """
+        return self.create_crypto_address('create_ltc_address')
+
+    def create_eth_address(self):
+        """
+        Create ETH address.
+        :return:
+        """
+        return self.create_crypto_address('create_eth_address')
+
+    def create_crypto_address(self, action):
+        """
+        Create crypto wallet address.
+        :param action:
+        :return:
+        """
+        params = {
+            'wallet_id': self.wallet_id,
+            'sign': self.generate_wallet_signature(),
+            'action': action,
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
+
+    def get_btc_address(self):
+        """
+        Get BTC address.
+        :return:
+        """
+        return self.get_crypto_address('get_btc_address')
+
+    def get_ltc_address(self):
+        """
+        Get LTC address.
+        :return:
+        """
+        return self.get_crypto_address('get_ltc_address')
+
+    def get_eth_address(self):
+        """
+        GET ETH address.
+        :return:
+        """
+        return self.get_crypto_address('get_eth_address')
+
+    def get_crypto_address(self, action):
+        """
+        Get crypto address by action.
+        :param action:
+        :return:
+        """
+        params = {
+            'wallet_id': self.wallet_id,
+            'sign': self.generate_wallet_signature(),
+            'action': action,
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
+
+    def get_btc_transaction(self, transaction_id):
+        """
+        Get information about BTC transaction.
+        :param transaction_id:
+        :return:
+        """
+        return self.get_transaction('get_btc_transaction', transaction_id)
+
+    def get_ltc_transaction(self, transaction_id):
+        """
+        Get information about LTC transaction.
+        :param transaction_id:
+        :return:
+        """
+        return self.get_transaction('get_ltc_transaction', transaction_id)
+
+    def get_eth_transaction(self, transaction_id):
+        """
+        Get information about ETH transaction.
+        :param transaction_id:
+        :return:
+        """
+        return self.get_transaction('get_eth_transaction', transaction_id)
+
+    def get_transaction(self, action, transaction_id):
+        """
+        Get information about transaction by action.
+        :param action:
+        :param transaction_id:
+        :return:
+        """
+        params = {
+            'wallet_id': self.wallet_id,
+            'transaction_id': transaction_id,
+            'sign': self.__make_hash(params=[self.wallet_id, transaction_id, self.wallet_api_key]),
+            'action': action,
+        }
+
+        return self.send_request(params=params, url=self.wallet_api_url)
+
+
     def generate_payment_link(self, order_id, summ, email='', description='') -> str:
         """
         Generate payment link for redirect user to Free-Kassa.com.
