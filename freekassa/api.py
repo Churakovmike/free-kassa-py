@@ -44,7 +44,6 @@ class FreeKassaApi:
 
     def get_order(self, order_id='', int_id=''):
         """
-
         :return:
         """
         params = {
@@ -169,7 +168,7 @@ class FreeKassaApi:
             'service_id': service_id,
             'account': account,
             'amount': amount,
-            'sign': '',
+            'sign': self.__make_hash(params=[self.wallet_id, amount, account, self.wallet_api_key]),
             'action': 'online_payment',
         }
 
@@ -177,12 +176,11 @@ class FreeKassaApi:
 
     def get_online_services(self):
         """
-        @todo: todo
         :return:
         """
         params = {
             'wallet_id': self.wallet_id,
-            'sign': '',
+            'sign': self.generate_wallet_signature(),
             'action': 'providers',
         }
 
@@ -190,14 +188,13 @@ class FreeKassaApi:
 
     def get_online_payment_status(self, payment_id):
         """
-        @todo: todo
         :param payment_id:
         :return:
         """
         params = {
             'wallet_id': self.wallet_id,
             'payment_id': payment_id,
-            'sign': '',
+            'sign': self.__make_hash(params=[self.wallet_id, payment_id, self.wallet_api_key]),
             'action': 'check_online_payment',
         }
 
