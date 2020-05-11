@@ -6,6 +6,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='free-kassa-py',
+    version='1.0.0',
     description='FreeKassa python 3 client',
     long_description='long_description',
     long_description_content_type='text/markdown',
