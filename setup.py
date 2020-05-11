@@ -1,14 +1,21 @@
+import io
+import os
 from setuptools import setup, find_packages
-from codecs import open
 from os import path
 
 here = path.abspath(path.dirname(__file__))
+
+try:
+    with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+        description = '\n'+ f.read()
+except FileNotFoundError:
+    description = 'long_description'
 
 setup(
     name='free-kassa-py',
     version='1.0.0',
     description='FreeKassa python 3 client',
-    long_description='long_description',
+    long_description=description,
     long_description_content_type='text/markdown',
     url='https://github.com/Churakovmike/free-kassa-py',
     author='Mikhail Churakov',
