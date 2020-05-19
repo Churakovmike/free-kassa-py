@@ -90,7 +90,7 @@ ltc_wallet = client.create_ltc_address()
 eth_wallet = client.create_eth_address()
 ```
 
-### Get crypto wallet address
+#### Get crypto wallet address
 ```python
 btc_wallet_address = client.get_btc_address()
 ltc_wallet_address = client.get_ltc_address()
