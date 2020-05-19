@@ -9,7 +9,8 @@ class FreeKassaApi:
     base_export_order_url = 'https://www.free-kassa.ru/export.php'
     wallet_api_url = 'https://www.fkwallet.ru/api_v1.php'
 
-    def __init__(self, merchant_id, first_secret, second_secret, wallet_id, wallet_api_key=''):
+    def __init__(self, merchant_id, first_secret,
+                 second_secret, wallet_id, wallet_api_key=''):
         self.merchant_id = merchant_id
         self.first_secret = first_secret
         self.second_secret = second_secret
@@ -128,7 +129,8 @@ class FreeKassaApi:
 
         return self.send_request(params=params, url=self.wallet_api_url)
 
-    def wallet_withdraw(self, purse, amount, currency, description, disable_exchange=1):
+    def wallet_withdraw(self, purse, amount, currency,
+                        description, disable_exchange=1):
         """
         Withdraw money from wallet.
         :param purse:
@@ -146,7 +148,13 @@ class FreeKassaApi:
             'disable_exchange': disable_exchange,
             'currency': currency,
             'action': 'cashout',
-            'sign': self.__make_hash(params=[self.wallet_id, currency, amount, purse, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                currency,
+                amount,
+                purse,
+                self.wallet_api_key
+            ]),
         }
 
         return self.send_request(params=params, url=self.wallet_api_url)
@@ -160,7 +168,11 @@ class FreeKassaApi:
         params = {
             'wallet_id': self.wallet_id,
             'payment_id': payment_id,
-            'sign': self.__make_hash(params=[self.wallet_id, payment_id, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                payment_id,
+                self.wallet_api_key
+            ]),
             'action': 'get_payment_status',
         }
 
@@ -177,7 +189,12 @@ class FreeKassaApi:
             'wallet_id': self.wallet_id,
             'purse': purse,
             'amount': amount,
-            'sign': self.__make_hash(params=[self.wallet_id, purse, amount, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                purse,
+                amount,
+                self.wallet_api_key
+            ]),
             'action': 'transfer',
         }
 
@@ -196,7 +213,12 @@ class FreeKassaApi:
             'service_id': service_id,
             'account': account,
             'amount': amount,
-            'sign': self.__make_hash(params=[self.wallet_id, amount, account, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                amount,
+                account,
+                self.wallet_api_key
+            ]),
             'action': 'online_payment',
         }
 
@@ -224,7 +246,11 @@ class FreeKassaApi:
         params = {
             'wallet_id': self.wallet_id,
             'payment_id': payment_id,
-            'sign': self.__make_hash(params=[self.wallet_id, payment_id, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                payment_id,
+                self.wallet_api_key
+            ]),
             'action': 'check_online_payment',
         }
 
@@ -334,13 +360,18 @@ class FreeKassaApi:
         params = {
             'wallet_id': self.wallet_id,
             'transaction_id': transaction_id,
-            'sign': self.__make_hash(params=[self.wallet_id, transaction_id, self.wallet_api_key]),
+            'sign': self.__make_hash(params=[
+                self.wallet_id,
+                transaction_id,
+                self.wallet_api_key
+            ]),
             'action': action,
         }
 
         return self.send_request(params=params, url=self.wallet_api_url)
 
-    def generate_payment_link(self, order_id, summ, email='', description='') -> str:
+    def generate_payment_link(self, order_id, summ,
+                              email='', description='') -> str:
         """
         Generate payment link for redirect user to Free-Kassa.com.
         :param order_id:
@@ -367,14 +398,18 @@ class FreeKassaApi:
         Generate api signature
         :return:str
         """
-        return hashlib.md5(str(self.merchant_id).encode('utf-8') + str(self.second_secret).encode('utf-8')).hexdigest()
+        return hashlib.md5(
+            str(self.merchant_id).encode('utf-8')
+            + str(self.second_secret).encode('utf-8')).hexdigest()
 
     def generate_wallet_signature(self):
         """
         Generate wallet signature
         :return:
         """
-        return hashlib.md5(str(self.wallet_id + self.wallet_api_key).encode('utf-8')).hexdigest()
+        return hashlib.md5(
+            str(self.wallet_id + self.wallet_api_key).encode('utf-8'))\
+            .hexdigest()
 
     def __make_hash(self, params, sep=' '):
         """
