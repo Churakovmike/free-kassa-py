@@ -340,7 +340,6 @@ class FreeKassaApi:
 
         return self.send_request(params=params, url=self.wallet_api_url)
 
-
     def generate_payment_link(self, order_id, summ, email='', description='') -> str:
         """
         Generate payment link for redirect user to Free-Kassa.com.
@@ -377,7 +376,7 @@ class FreeKassaApi:
         """
         return hashlib.md5(str(self.wallet_id + self.wallet_api_key).encode('utf-8')).hexdigest()
 
-    def __make_hash(self, params, sep=' ', *args, **kwargs):
+    def __make_hash(self, params, sep=' '):
         """
         Generate hash query for request params
         :param params:
