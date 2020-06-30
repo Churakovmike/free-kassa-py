@@ -383,7 +383,8 @@ class FreeKassaApi:
         params = {
             'o': order_id,
             'oa': summ,
-            's': self.__make_hash(params=[]),
+            # 's': self.__make_hash(params=[]),
+            's': self.generate_form_signature(summ, order_id),
             'm': self.merchant_id,
             'i': 'rub',
             'em': email,
@@ -410,6 +411,20 @@ class FreeKassaApi:
         return hashlib.md5(
             str(self.wallet_id + self.wallet_api_key).encode('utf-8'))\
             .hexdigest()
+
+    def generate_form_signature(self, amount, order_id):
+        """
+        Generate signature for form and link
+        :param amount:
+        :param order_id:
+        :return:
+        """
+        return self.__make_hash(sep=":", params=[
+            str(self.merchant_id),
+            str(amount),
+            str(self.first_secret),
+            str(order_id),
+        ])
 
     def __make_hash(self, params, sep=' '):
         """
