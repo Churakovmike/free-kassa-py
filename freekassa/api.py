@@ -1,3 +1,4 @@
+import json
 import requests
 import hashlib
 from urllib.parse import urlencode
@@ -10,12 +11,13 @@ class FreeKassaApi:
     wallet_api_url = 'https://www.fkwallet.ru/api_v1.php'
 
     def __init__(self, merchant_id, first_secret,
-                 second_secret, wallet_id, wallet_api_key=''):
+                 second_secret, wallet_id, wallet_api_key='', response_format='json'):
         self.merchant_id = merchant_id
         self.first_secret = first_secret
         self.second_secret = second_secret
         self.wallet_id = wallet_id
         self.wallet_api_key = wallet_api_key
+        self.response_format = response_format
 
     def send_request(self, params, url=None, method='post'):
         """
@@ -25,10 +27,15 @@ class FreeKassaApi:
         :param method:method
         :return:
         """
+        params["type"] = self.response_format
         if url is None:
             url = self.base_url
 
-        return requests.__dict__[method](url, params=params)
+        response = requests.__dict__[method](url, params=params)
+        if 'json' == self.response_format:
+            response = response.json()
+
+        return response
 
     def get_balance(self):
         """
