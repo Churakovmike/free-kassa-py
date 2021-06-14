@@ -2,6 +2,7 @@ import json
 import requests
 import hashlib
 from urllib.parse import urlencode
+import xmltodict
 
 
 class FreeKassaApi:
@@ -401,6 +402,22 @@ class FreeKassaApi:
         }
 
         return self.base_form_url + "?" + urlencode(params)
+
+    def export(self, date_from=None, date_to=None, status=None, limit=100, offset=None):
+        params = {
+            "date_from": date_from,
+            "date_to": date_to,
+            "status": status,
+            "limit": limit,
+            "offset": offset,
+            "action": "get_orders",
+        }
+        response_format = self.response_format
+        self.response_format = "xml"
+        response = self.send_request(params=params, url=self.base_export_order_url, method='get')
+        self.response_format = response_format
+
+        return xmltodict.parse(response.text)
 
     def generate_api_signature(self):
         """

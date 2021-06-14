@@ -37,7 +37,7 @@ setup(
 
     packages=find_packages(exclude=['tests']),
 
-    install_requires=['requests'],
+    install_requires=['requests', 'xmltodict'],
 
     python_requires='>3.4',
 
