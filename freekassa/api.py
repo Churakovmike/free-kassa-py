@@ -1,6 +1,8 @@
+import json
 import requests
 import hashlib
 from urllib.parse import urlencode
+import xmltodict
 
 
 class FreeKassaApi:
@@ -10,12 +12,13 @@ class FreeKassaApi:
     wallet_api_url = 'https://www.fkwallet.ru/api_v1.php'
 
     def __init__(self, merchant_id, first_secret,
-                 second_secret, wallet_id, wallet_api_key=''):
+                 second_secret, wallet_id, wallet_api_key='', response_format='json'):
         self.merchant_id = merchant_id
         self.first_secret = first_secret
         self.second_secret = second_secret
         self.wallet_id = wallet_id
         self.wallet_api_key = wallet_api_key
+        self.response_format = response_format
 
     def send_request(self, params, url=None, method='post'):
         """
@@ -25,10 +28,17 @@ class FreeKassaApi:
         :param method:method
         :return:
         """
+        params["type"] = self.response_format
+        params['merchant_id'] = self.merchant_id
+        params['s'] = self.generate_api_signature(),
         if url is None:
             url = self.base_url
 
-        return requests.__dict__[method](url, params=params)
+        response = requests.__dict__[method](url, params=params)
+        if 'json' == self.response_format:
+            response = response.json()
+
+        return response
 
     def get_balance(self):
         """
@@ -371,7 +381,7 @@ class FreeKassaApi:
         return self.send_request(params=params, url=self.wallet_api_url)
 
     def generate_payment_link(self, order_id, summ,
-                              email='', description='') -> str:
+                              email='', description='', currency='rub', language='ru') -> str:
         """
         Generate payment link for redirect user to Free-Kassa.com.
         :param order_id:
@@ -385,13 +395,29 @@ class FreeKassaApi:
             'oa': summ,
             's': self.generate_form_signature(summ, order_id),
             'm': self.merchant_id,
-            'i': 'rub',
+            'i': currency,
             'em': email,
-            'lang': 'ru',
+            'lang': language,
             'us_desc': description,
         }
 
         return self.base_form_url + "?" + urlencode(params)
+
+    def export(self, date_from=None, date_to=None, status=None, limit=100, offset=None):
+        params = {
+            "date_from": date_from,
+            "date_to": date_to,
+            "status": status,
+            "limit": limit,
+            "offset": offset,
+            "action": "get_orders",
+        }
+        response_format = self.response_format
+        self.response_format = "xml"
+        response = self.send_request(params=params, url=self.base_export_order_url, method='get')
+        self.response_format = response_format
+
+        return xmltodict.parse(response.text)
 
     def generate_api_signature(self):
         """
