@@ -28,6 +28,8 @@ class FreeKassaApi:
         :return:
         """
         params["type"] = self.response_format
+        params['merchant_id'] = self.merchant_id
+        params['s'] = self.generate_api_signature(),
         if url is None:
             url = self.base_url
 
